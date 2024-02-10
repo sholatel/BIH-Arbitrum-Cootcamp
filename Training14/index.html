@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFT market</title>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+            type="application/javascript">
+        </script>
+        <script>
+            let nftMarketplaceContract;
+            let nftMarketplaceContractAddr = "0x62A6349b9112D64a465D15F4623001CcA00EbAc6";
+            let signer
+            
+            async function connectWallet ()  {
+                let provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send("eth_requestAccounts", []);
+                signer = provider.getSigner()
+            }   
+            
+            async function connectToContract  () {
+                try {
+                    if (!signer) {
+                        alert("Please connect to your wallet first")
+                        return
+                    }
+                    let abiResult  =  await fetch("abi.json")
+                    let abi = await abiResult.json();
+                    nftMarketplaceContract = new ethers.Contract(nftMarketplaceContractAddr,abi,signer)
+                    alert("You can now interact with the NFT marketplace contract!!!")
+                    console.log("NFT Contract marketplace",nftMarketplaceContract)
+                }
+                catch (err) {
+                     alert("Failed to interact with NFT collection")
+                     console.log('Error:', err)
+                }
+            }
+    
+        </script>
+</head>
+<body>
+        <div>
+            <button onclick="connectWallet()">Connect Wallet</button>
+            <button onclick="connectToContract()">Interact with  NFT contract</button>
+        </div>
+        
+</body>
+</html>
